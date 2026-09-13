@@ -1,0 +1,17 @@
+{
+  "name": "@forgeverity/verifier",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ForgeVerity offline export-bundle verifier: JCS, Ed25519 receipts, trust chains, metadata DAG.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@forgeverity/schema": "1.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.test.json && node --test \"dist-test/test/*.test.js\"",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit"
+  }
+}

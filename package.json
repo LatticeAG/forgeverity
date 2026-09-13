@@ -1,0 +1,20 @@
+{
+  "name": "forgeverity",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ForgeVerity TypeScript workspace: schema, verifier, dashboard",
+  "workspaces": [
+    "packages/schema",
+    "packages/verifier",
+    "apps/dashboard"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.6.0"
+  }
+}

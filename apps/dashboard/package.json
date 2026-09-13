@@ -1,0 +1,15 @@
+{
+  "name": "@forgeverity/dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ForgeVerity read-mostly static dashboard: stream list, timeline, job/release/reference views.",
+  "type": "module",
+  "dependencies": {
+    "@forgeverity/schema": "1.0.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.test.json && node --test \"dist-test/test/*.test.js\"",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit"
+  }
+}

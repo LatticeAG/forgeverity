@@ -1,0 +1,14 @@
+{
+  "name": "@forgeverity/schema",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ForgeVerity normative protocol schemas (spec section 5) with runtime validators.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.test.json && node --test \"dist-test/test/*.test.js\"",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit"
+  }
+}

@@ -1,0 +1,42 @@
+# Spec / build-process files — never tracked
+SPEC*.md
+*EXTREME*.md
+PROMPT*.md
+REVIEW*.md
+FIX_PROMPT*
+SELFREVIEW*
+DRAFT*
+REPORT.md
+INTERFACES.md
+STATUS*
+BUILD_PROMPT.md
+*.done
+*.reported
+CASH_REPORTED
+IF_REPORTED
+ALL_DONE.reported
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / TS
+node_modules/
+dist/
+dist-test/
+*.tsbuildinfo
+
+# ForgeVerity runtime state
+.forgeverity/
+.devin/forgeverity*.json
+apps/dashboard/dist/
+
+# OS / editor
+.DS_Store
+*.swp

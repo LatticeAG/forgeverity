@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ForgeVerity dashboard</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+        line-height: 1.5;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 72rem;
+        padding: 1rem;
+      }
+      table {
+        border-collapse: collapse;
+        margin-block: 0.75rem;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #8884;
+        padding: 0.3rem 0.6rem;
+        text-align: left;
+        overflow-wrap: anywhere;
+        font-family: ui-monospace, monospace;
+        font-size: 0.85rem;
+      }
+      th {
+        font-family: system-ui, sans-serif;
+      }
+      tr:focus {
+        outline: 2px solid #06c;
+        outline-offset: -2px;
+      }
+      nav a {
+        margin-inline-end: 1rem;
+      }
+      #scope {
+        border: 1px solid #8888;
+        padding: 0.5rem 0.75rem;
+        margin-block: 1rem;
+      }
+      label {
+        display: inline-block;
+        margin-inline-end: 1rem;
+      }
+      input {
+        min-width: 20rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ForgeVerity</h1>
+    <p id="scope" role="note"></p>
+    <form onsubmit="return false">
+      <label>
+        API base
+        <input id="base-url" type="url" value="http://127.0.0.1:8742" autocomplete="off" />
+      </label>
+      <label>
+        Bearer token (session only)
+        <input id="token" type="password" autocomplete="off" />
+      </label>
+      <button id="refresh" type="button">Refresh</button>
+    </form>
+    <nav aria-label="views"><a href="#/">streams</a></nav>
+    <main id="app" tabindex="-1"></main>
+    <script type="module" src="./dist/app.js"></script>
+  </body>
+</html>
