@@ -457,7 +457,7 @@ def validate_generation_body(v: object) -> dict:
     _int(o["expected_revision"], "GenerationBody.expected_revision", 0)
     _digest(o["candidate_hash"], "GenerationBody.candidate_hash")
     if o["generator"] != "ForgeDistill":
-        raise _fail("SCHEMA", "GenerationBody.generator must be ForgeDistill.")
+        raise _fail("SCHEMA", f"GenerationBody.generator must be \"ForgeDistill\", got {o['generator']!r}.")
     _str(o["generator_version"], "GenerationBody.generator_version", 1, 64, VERSION_RE)
     _digest(o["generator_config_hash"], "GenerationBody.generator_config_hash")
     _digest(o["model_artifact_hash"], "GenerationBody.model_artifact_hash")

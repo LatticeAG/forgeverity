@@ -63,25 +63,35 @@ npm run build -w apps/dashboard
 ## Quick start (local)
 
 ```bash
-forgeverity init --directory . --project fvprj_000000000000000000001 --json
-forgeverity key generate --purpose receipt   --out secrets/receipt.json
-forgeverity key generate --purpose origin    --out secrets/origin.json
-forgeverity key generate --purpose generator --out secrets/generator.json
+forgeverity --json init --directory . --project fvprj_000000000000000000001
+forgeverity key generate --purpose receipt   --out secrets/keys/receipt.json
+forgeverity key generate --purpose origin    --out secrets/keys/origin.json
+forgeverity key generate --purpose generator --out secrets/keys/generator.json
 # write .devin/forgeverity-trust.json pinning the three public keys, then:
 forgeverity token issue --principal fvact_000000000000000000001 --role admin --ttl-seconds 300 --out secrets/token.json
 forgeverity serve --bind 127.0.0.1 --port 8742 &   # plus: forgeverity worker
 export FORGEVERITY_TOKEN=...                        # contents of secrets/token.json
-forgeverity reference register --train train.json --holdout holdout.json \
-    --source fvsrc_000000000000000000001 --key-id fvkey_000000000000000000002 --json
-forgeverity policy register --file policy.json --json
-forgeverity stream create --policy sha256:... --reference fvref_... --json
-forgeverity submit --request job.json --candidate candidate.json --wait --json
-forgeverity report fvjob_... --json
-forgeverity consume --stream fvstr_... --expected-revision 1 \
-    --release sha256:... --consumer training-run --out corpus/ --json
-forgeverity export sunlight --release sha256:... --out export.json --json
-forgeverity verify export.json --trust .devin/forgeverity-trust.json --json
+forgeverity --json reference register --train train.json --holdout holdout.json \
+    --source fvsrc_000000000000000000001 --key-id fvkey_000000000000000000002
+forgeverity --json policy register --file policy.json
+forgeverity --json stream create --policy sha256:... --reference fvref_...
+forgeverity --json submit --request job.json --candidate candidate.json --wait
+forgeverity --json report fvjob_...
+forgeverity --json consume --stream fvstr_... --expected-revision 1 \
+    --release sha256:... --consumer training-run --out corpus/
+forgeverity --json export sunlight --release sha256:... --out export.json
+forgeverity --json verify export.json --trust .devin/forgeverity-trust.json
 ```
+
+Notes:
+
+- `--json` is a **global** flag: it must appear before the subcommand
+  (`forgeverity --json init ...`, not `forgeverity init ... --json`).
+- Token TTL is capped at 300 seconds. For longer sessions, re-issue a token
+  with `forgeverity token issue` when the current one expires.
+- The JobRequest's `generation` field is a signed `fv.generation/1` assertion;
+  its `body.generator` must be the literal string `"ForgeDistill"` — any other
+  generator name is rejected with a `SCHEMA` error.
 
 See `forgeverity <command> --help` for the exact flag contract of each command.
 
