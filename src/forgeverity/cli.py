@@ -791,6 +791,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    # Accept the global JSON switch after subcommands as well.
+    if "--json" in argv and ("--" not in argv or argv.index("--json") < argv.index("--")):
+        argv.remove("--json")
+        argv.insert(0, "--json")
     args = build_parser().parse_args(argv)
     try:
         return args.fn(args)
