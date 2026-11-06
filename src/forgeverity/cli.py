@@ -117,7 +117,7 @@ def _service(cfg: dict, root: Path) -> Service:
 
 def _key_resolver(root: Path):
     def resolve(key_id: str):
-        for base in (root / "secrets" / "keys", Path.home() / ".forgeverity" / "keys"):
+        for base in (root / "secrets" / "keys", root / "secrets", Path.home() / ".forgeverity" / "keys"):
             for kf in base.glob("*.json"):
                 try:
                     record, pem = keys_mod.load_key(kf)
@@ -130,7 +130,7 @@ def _key_resolver(root: Path):
 
 
 def _find_key_file(root: Path, key_id: str) -> tuple[dict, bytes]:
-    for base in (root / "secrets" / "keys", Path.home() / ".forgeverity" / "keys"):
+    for base in (root / "secrets" / "keys", root / "secrets", Path.home() / ".forgeverity" / "keys"):
         for kf in base.glob("*.json"):
             try:
                 record, pem = keys_mod.load_key(kf)
