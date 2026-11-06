@@ -99,10 +99,13 @@ See `forgeverity <command> --help` for the exact flag contract of each command.
 |---|---|
 | `src/forgeverity/` | MIT Python core: `canonical`, `schema`, `filter`, `metrics`, `gate`, `store`, `audit`, `api`, `cli`, `forgedistill`, `verify`, `service` |
 | `tests/` | Conformance vectors `TV-F--01..64`, HTTP catalog examples, store/race tests |
-| `tests/vectors/` | Executable fixture materializer (spec §9.2) |
+| `tests/vectors/` | Fixture materializer used by the conformance tests (spec §9.2) |
 | `packages/schema` | TS canonicalize/digest/strict-decode/validators |
 | `packages/verifier` | TS export-bundle verifier (historical mode) |
 | `apps/dashboard` | Static TS dashboard (stream list, timeline, job/release/reference views) |
+
+Run the conformance vectors with `python3 -m pytest -q tests/test_vectors.py`.
+`tests.vectors` supplies fixtures and is not a command-line entry point.
 
 ## HTTP API
 
