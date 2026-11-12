@@ -117,7 +117,7 @@ def _service(cfg: dict, root: Path) -> Service:
 
 def _key_resolver(root: Path):
     def resolve(key_id: str):
-        for base in (root / "secrets" / "keys", Path.home() / ".forgeverity" / "keys"):
+        for base in (root / "secrets" / "keys", root / "secrets", Path.home() / ".forgeverity" / "keys"):
             for kf in base.glob("*.json"):
                 try:
                     record, pem = keys_mod.load_key(kf)
@@ -130,7 +130,7 @@ def _key_resolver(root: Path):
 
 
 def _find_key_file(root: Path, key_id: str) -> tuple[dict, bytes]:
-    for base in (root / "secrets" / "keys", Path.home() / ".forgeverity" / "keys"):
+    for base in (root / "secrets" / "keys", root / "secrets", Path.home() / ".forgeverity" / "keys"):
         for kf in base.glob("*.json"):
             try:
                 record, pem = keys_mod.load_key(kf)
@@ -791,6 +791,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    # Accept the global JSON switch after subcommands as well.
+    if "--json" in argv and ("--" not in argv or argv.index("--json") < argv.index("--")):
+        argv.remove("--json")
+        argv.insert(0, "--json")
     args = build_parser().parse_args(argv)
     try:
         return args.fn(args)

@@ -62,25 +62,33 @@ npm run build -w apps/dashboard
 
 ## Quick start (local)
 
+The global `--json` flag can precede the command (as shown below). `init`
+creates `secrets/keys/`; keep private key JSON files there so trust setup and
+signing can find them. Initialize trust with those keys before issuing a token.
+
 ```bash
-forgeverity init --directory . --project fvprj_000000000000000000001 --json
-forgeverity key generate --purpose receipt   --out secrets/receipt.json
-forgeverity key generate --purpose origin    --out secrets/origin.json
-forgeverity key generate --purpose generator --out secrets/generator.json
-# write .devin/forgeverity-trust.json pinning the three public keys, then:
+forgeverity --json init --directory . --project fvprj_000000000000000000001
+forgeverity key generate --purpose receipt   --out secrets/keys/receipt.json
+forgeverity key generate --purpose origin    --out secrets/keys/origin.json
+forgeverity key generate --purpose generator --out secrets/keys/generator.json
+RECEIPT_KEY=$(python3 -c 'import json; print(json.load(open("secrets/keys/receipt.json"))["key"]["id"])')
+ORIGIN_KEY=$(python3 -c 'import json; print(json.load(open("secrets/keys/origin.json"))["key"]["id"])')
+GENERATOR_KEY=$(python3 -c 'import json; print(json.load(open("secrets/keys/generator.json"))["key"]["id"])')
+forgeverity --json trust init --receipt-key "$RECEIPT_KEY" \
+    --source-key "fvsrc_000000000000000000001=$ORIGIN_KEY" --generator-key "$GENERATOR_KEY"
 forgeverity token issue --principal fvact_000000000000000000001 --role admin --ttl-seconds 300 --out secrets/token.json
 forgeverity serve --bind 127.0.0.1 --port 8742 &   # plus: forgeverity worker
 export FORGEVERITY_TOKEN=...                        # contents of secrets/token.json
-forgeverity reference register --train train.json --holdout holdout.json \
-    --source fvsrc_000000000000000000001 --key-id fvkey_000000000000000000002 --json
-forgeverity policy register --file policy.json --json
-forgeverity stream create --policy sha256:... --reference fvref_... --json
-forgeverity submit --request job.json --candidate candidate.json --wait --json
-forgeverity report fvjob_... --json
-forgeverity consume --stream fvstr_... --expected-revision 1 \
-    --release sha256:... --consumer training-run --out corpus/ --json
-forgeverity export sunlight --release sha256:... --out export.json --json
-forgeverity verify export.json --trust .devin/forgeverity-trust.json --json
+forgeverity --json reference register --train train.json --holdout holdout.json \
+    --source fvsrc_000000000000000000001 --key-id "$ORIGIN_KEY"
+forgeverity --json policy register --file policy.json
+forgeverity --json stream create --policy sha256:... --reference fvref_...
+forgeverity --json submit --request job.json --candidate candidate.json --wait
+forgeverity --json report fvjob_...
+forgeverity --json consume --stream fvstr_... --expected-revision 1 \
+    --release sha256:... --consumer training-run --out corpus/
+forgeverity --json export sunlight --release sha256:... --out export.json
+forgeverity --json verify export.json --trust .devin/forgeverity-trust.json
 ```
 
 See `forgeverity <command> --help` for the exact flag contract of each command.
@@ -91,10 +99,13 @@ See `forgeverity <command> --help` for the exact flag contract of each command.
 |---|---|
 | `src/forgeverity/` | MIT Python core: `canonical`, `schema`, `filter`, `metrics`, `gate`, `store`, `audit`, `api`, `cli`, `forgedistill`, `verify`, `service` |
 | `tests/` | Conformance vectors `TV-F--01..64`, HTTP catalog examples, store/race tests |
-| `tests/vectors/` | Executable fixture materializer (spec §9.2) |
+| `tests/vectors/` | Fixture materializer used by the conformance tests (spec §9.2) |
 | `packages/schema` | TS canonicalize/digest/strict-decode/validators |
 | `packages/verifier` | TS export-bundle verifier (historical mode) |
 | `apps/dashboard` | Static TS dashboard (stream list, timeline, job/release/reference views) |
+
+Run the conformance vectors with `python3 -m pytest -q tests/test_vectors.py`.
+`tests.vectors` supplies fixtures and is not a command-line entry point.
 
 ## HTTP API
 
